@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="47.704872mm"
+   height="19.896666mm"
+   viewBox="0 0 47.704872 19.896666"
+   version="1.1"
+   id="svg1928"
+   inkscape:version="1.2.2 (732a01da63, 2022-12-09)"
+   sodipodi:docname="icon.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs1922">
+    <rect
+       x="25.714286"
+       y="25.714286"
+       width="14.285714"
+       height="80"
+       id="rect283" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#000000"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="-421.42857"
+     inkscape:cy="105.71429"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1600"
+     inkscape:window-height="829"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:showpageshadow="2"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#000000" />
+  <metadata
+     id="metadata1925">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-56.278496,-95.795719)">
+    <text
+       xml:space="preserve"
+       transform="matrix(0.26458333,0,0,0.26458333,56.278496,95.795719)"
+       id="text281"
+       style="font-size:64px;white-space:pre;shape-inside:url(#rect283);display:inline;fill:#000000" />
+    <text
+       xml:space="preserve"
+       style="font-size:42.3333px;fill:#ffffff;stroke-width:0.264583"
+       x="50.911228"
+       y="121.6493"
+       id="text289"><tspan
+         sodipodi:role="line"
+         id="tspan287"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:42.3333px;font-family:'Showcard Gothic';-inkscape-font-specification:'Showcard Gothic, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;stroke-width:0.264583"
+         x="50.911228"
+         y="121.6493">R2</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:19.7556px;fill:#00ff00;stroke-width:0.264583"
+       x="29.665806"
+       y="116.6982"
+       id="text442"
+       transform="rotate(-13.087057)"
+       inkscape:transform-center-x="-1.9397007"
+       inkscape:transform-center-y="-1.759614"><tspan
+         sodipodi:role="line"
+         id="tspan440"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:19.7556px;font-family:'Clarendon BT';-inkscape-font-specification:'Clarendon BT, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ff0000;stroke-width:0.264583"
+         x="29.665806"
+         y="116.6982">ext</tspan></text>
+  </g>
+</svg>
