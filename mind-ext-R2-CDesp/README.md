@@ -23,7 +23,8 @@ Pen Holder https://www.thingiverse.com/thing:6964192
 
 Servo adaptor https://www.thingiverse.com/thing:6958101
 
-
+## VIDEO
+https://youtu.be/83h1kVOISvc
 
 ## Release Logs
 * V0.1  Basic functions completed.
