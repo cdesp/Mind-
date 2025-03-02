@@ -1,4 +1,4 @@
-# R2 Extension
+# R3 Extension
 
 
 ![](./arduinoC/_images/featured.png)
