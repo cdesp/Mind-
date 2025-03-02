@@ -10,6 +10,7 @@
 
       void DESP_Robot::init(){
         dspGyro->init();
+        Serial.begin(9600);
       }
 
       // void DESP_Robot::setSpeedObject(TB6612FNG *obj) {
@@ -37,37 +38,59 @@
       }
        
       void DESP_Robot::left(){
-        spdobj->setSpeed(M1, CW, speed);
-        spdobj->setSpeed(M2, CW, speed);
-      }
-       
-      void DESP_Robot::right(){
         spdobj->setSpeed(M1, CCW, speed);
         spdobj->setSpeed(M2, CCW, speed);
       }
-                            
-      void DESP_Robot::turnLeft(int deg){  
-        lastAngle=deg;
-        dspGyro->goLeft(deg); 
-        left(); //start moving        
+       
+      void DESP_Robot::right(){
+        spdobj->setSpeed(M1, CW, speed);
+        spdobj->setSpeed(M2, CW, speed);
+      }
+      
+      void DESP_Robot::readGyro(){
+         //dspGyro->checkGyro(false); 
+         //dspGyro->setCurrentPosition();
+          dspGyro->getGyroSettings(false);
+      }
+
+      void DESP_Robot::turn(){
+        int oldspeed = speed;
+        speed =50;
+        Serial.print("from:");Serial.print(dspGyro->curbearing); Serial.print(" To:");Serial.println(dspGyro->targbearing);     
         do {
-          dspGyro->checkGyro(false); 
-          dspGyro->setCurrentPosition();
+          readGyro();           
+          int d= dspGyro->getDistance();
+          Serial.print("pos:");Serial.print(dspGyro->curbearing);Serial.print(" To:");Serial.print(dspGyro->targbearing); Serial.print(" Dist:");Serial.println(d);
+          
+          
+          if (d>0) { //go right
+            right(); //start moving          
+            //Serial.println("turn right");
+          }
+          else { //go left
+            left(); //start moving        
+            //Serial.println("turn left");  
+          }
+         //delay(1000);
         } while (!dspGyro->isTargetReached(4));
-        dspGyro->targetReached();
         stop(); //stop moving
+        Serial.print("Target Reached from:");Serial.print(lastAngle); Serial.print(" Now:");Serial.println(dspGyro->curbearing);
+        dspGyro->targetReached();        
+        speed= oldspeed;
+      }
+
+      void DESP_Robot::turnLeft(int deg){                  
+        readGyro();
+        lastAngle=dspGyro->curbearing;
+        dspGyro->goLeft(deg);   
+        turn();
       }
        
       void DESP_Robot::turnRight(int deg){  
-        lastAngle=deg;
-        dspGyro->goRight(deg); 
-        right(); //start moving        
-        do {
-          dspGyro->checkGyro(false); 
-          dspGyro->setCurrentPosition();
-        } while (!dspGyro->isTargetReached(4));
-        dspGyro->targetReached();
-        stop(); //stop moving     
+        readGyro();
+        lastAngle=dspGyro->curbearing;
+        dspGyro->goRight(deg);   
+        turn();
       }      
 
       void DESP_Robot::initLCD(int type){
@@ -85,6 +108,10 @@
 
       void DESP_Robot::writeLCD(char* msg){
         lcd->print(msg);
+      }
+
+      void DESP_Robot::writeLCD(int no){
+        lcd->print(no);
       }
 
       void DESP_Robot::setCursorLCD(int lx,int ly){
@@ -111,3 +138,7 @@
         lcd->scrollDisplayRight();
       }
   
+      int DESP_Robot::getDegrees(){
+        readGyro();         
+        return dspGyro->curbearing;
+      }

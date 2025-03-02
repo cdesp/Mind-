@@ -5,20 +5,20 @@
 
 #include "Arduino.h"
 #include <Wire.h>
-#include <QMC5883LCompass.h>
+#include <MechaQMC5883.h>
 
-
+ 
 class DESP_Gyro
 {
   private:
-    QMC5883LCompass *qmc;
+	  MechaQMC5883 *qmc;
       
     int azimuth;    
     int redogyro;  
     
     
   public:
-    float curbearing;
+  	float curbearing;
     float targbearing;
     boolean turning;
 

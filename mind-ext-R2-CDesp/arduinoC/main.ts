@@ -20,6 +20,17 @@ namespace cdesplib {
        }
     }
 
+    //% block="μοίρες" blockType="reporter"
+    export function getDegrees(parameter: any, block: any) {
+        if(Generator.board === 'arduino'){ 
+            Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
+            Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);           
+            Generator.addSetup(`DSRC_1`, `robo_car.init();`);
+            Generator.addCode(`robo_car.getDegrees()`);
+        }
+     }
+ 
+
     //% block="Θέσε ταχύτητα [SPD] "
     //% SPD.shadow="number" SPD.defl="120"
     export function setSpeed(parameter: any, block: any) {
@@ -71,6 +82,7 @@ namespace cdesplib {
         if(Generator.board === 'arduino'){
             Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
             Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);            
+            Generator.addSetup(`DSRC_1`, `robo_car.init();`);            
             Generator.addCode(`robo_car.turnLeft(${deg});`);
         }
     }

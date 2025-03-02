@@ -1,12 +1,13 @@
-#include "DspGyro3.h"
+#include "DspGyro2.h"
 
 
  
 
 
 DESP_Gyro::DESP_Gyro() {
-  qmc= new QMC5883LCompass();
- 
+  
+  qmc= new MechaQMC5883 ;
+  
   redogyro=0;
   turning=false;
   targbearing=0;
@@ -18,14 +19,7 @@ DESP_Gyro::DESP_Gyro() {
 void DESP_Gyro::checkGyro(boolean debug){
   int x, y, z;
   
-  //qmc->read(&x, &y, &z,&azimuth);  
-  qmc->read(); // Read data from QMC5883L
-  x = qmc->getX();
-  y = qmc->getY();
-  z = qmc->getZ();
-
-  azimuth = (int)(atan2(y, x) * 180 / PI);
-  if (azimuth < 0) azimuth += 360; // Convert to 0-360 range
+  qmc->read(&x, &y, &z,&azimuth);  
   
 }
 
@@ -37,10 +31,11 @@ void DESP_Gyro::calibrateGyro(boolean debug){
 void DESP_Gyro::init(){
   Wire.begin();
   qmc->init();
-  //qmc->setMode(Mode_Continuous,ODR_200Hz,RNG_2G,OSR_256);
+  qmc->setMode(Mode_Continuous,ODR_200Hz,RNG_2G,OSR_256);
 
 }
 
+//reversed
 void DESP_Gyro::goLeft(int deg){
    checkGyro(true);
    curbearing=azimuth;
@@ -48,10 +43,10 @@ void DESP_Gyro::goLeft(int deg){
    if (targbearing<-180)
     targbearing=360+targbearing;
    turning=true;
-//   Serial.print("Turning 90 degrees left from ");
-//   Serial.print(curbearing,DEC);
-//   Serial.print(" to ");
-//   Serial.println(targbearing,DEC);       
+   Serial.print("Turning  degrees left from ");
+   Serial.print(curbearing,DEC);
+   Serial.print(" to ");
+   Serial.println(targbearing,DEC);       
 }
 
 void DESP_Gyro::goRight(int deg){
@@ -61,10 +56,10 @@ void DESP_Gyro::goRight(int deg){
    if (targbearing>180)
     targbearing=targbearing-360;
    turning=true;
-  // Serial.print("Turning 90 degrees right from ");
-  // Serial.print(curbearing,DEC);
-  // Serial.print(" to ");
-  // Serial.println(targbearing,DEC);       
+   Serial.print("Turning  degrees right from ");
+   Serial.print(curbearing,DEC);
+   Serial.print(" to ");
+   Serial.println(targbearing,DEC);       
 }
 
 int DESP_Gyro::getBearingDistance(float b1,float b2){
@@ -106,8 +101,17 @@ void DESP_Gyro::targetReached(){
 
 void DESP_Gyro::getGyroSettings(boolean debug){
 	redogyro=0;
-  checkGyro(debug);
-
+  //checkGyro(debug);
+  //RemDebug("GGS");
+  do {  	   
+       if (redogyro++<6){
+         delay(5);//was 10
+         checkGyro(debug);
+         //checkGyro(true);
+        
+       } else break;               
+  } while  ((azimuth==180) or (azimuth==0)); //sometimes is the wrong output so we recheck to be sure
+  
   setCurrentPosition();
 }
 
@@ -118,7 +122,7 @@ void DESP_Gyro::gotoBearing(float b){
 
 float DESP_Gyro::getSafeGyroPos(){
    int safecnt=0;
-   int sum;
+   int sum=0;
    
    // RemDebug("SGP");
     getGyroSettings(false);            
