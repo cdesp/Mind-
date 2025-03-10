@@ -14,9 +14,9 @@ namespace cdesplib {
     export function getDistance(parameter: any, block: any) {
        if(Generator.board === 'arduino'){ 
         Generator.addInclude("SR01", "#include <SR01.h>");
-        Generator.addSetup(`SRSetup_1`, `pinMode(3, OUTPUT);`);
-        Generator.addSetup(`SRSetup_2`, `pinMode(4, OUTPUT);`);
-        Generator.addCode(`(getDistance(3,4))`);
+        Generator.addSetup(`SRSetup_1`, `pinMode(A0, OUTPUT);`);
+        Generator.addSetup(`SRSetup_2`, `pinMode(2, OUTPUT);`);
+        Generator.addCode(`(getDistance(A0,2))`);
        }
     }
 

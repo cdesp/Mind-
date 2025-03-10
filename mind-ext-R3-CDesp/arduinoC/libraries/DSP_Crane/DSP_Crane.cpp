@@ -9,7 +9,7 @@
         servo_A1 = new Servo();  //Left Right
         
         pos_6 = 100;
-        pos_9 = 80;
+        pos_9 = 100;
         pos_A0 = 50;
         pos_A1 = 90;
       }
