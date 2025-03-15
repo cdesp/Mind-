@@ -28,6 +28,14 @@ Servo adaptor - Pen goes Left - Right https://www.thingiverse.com/thing:6958101
 Pen Holder https://www.thingiverse.com/thing:6964192  
 Servo Adaptor - Pen goes Up-Down  https://www.thingiverse.com/thing:6977092
 
+## Schematics for Small boards for the R2
+
+### i2c Expander
+This small board is usefull if you want to have 2 i2c devices.
+
+### i2c MPU6050 Accelerometer & Gyroscope
+This small board allows a GY521(MPU6050) to interface with the R2 via i2c
+
 
 ## VIDEO
 https://youtu.be/83h1kVOISvc
