@@ -15,7 +15,7 @@ namespace cdesplib {
        if(Generator.board === 'arduino'){ 
         Generator.addInclude("SR01", "#include <SR01.h>");
         Generator.addSetup(`SRSetup_1`, `pinMode(A0, OUTPUT);`);
-        Generator.addSetup(`SRSetup_2`, `pinMode(2, OUTPUT);`);
+        Generator.addSetup(`SRSetup_2`, `pinMode(2, INPUT);`);
         Generator.addCode(`(getDistance(A0,2))`);
        }
     }

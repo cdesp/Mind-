@@ -5,7 +5,7 @@
       DESP_Robot::DESP_Robot(){        
         speed = 100;   
         spdobj = new TB6612FNG(5,4,6,7);
-        dspGyro = new DESP_Gyro();     
+        dspGyro = new DESP_Gyro(MPU6050_DEFAULT_ADDRESS);     
       }
 
       void DESP_Robot::init(){
@@ -55,15 +55,19 @@
 
       void DESP_Robot::turn(){
         int oldspeed = speed;
-        speed =50;
-        Serial.print("from:");Serial.print(dspGyro->curbearing); Serial.print(" To:");Serial.println(dspGyro->targbearing);     
+        speed =40;
+        Serial.print("from:");Serial.print(dspGyro->curbearing); Serial.print(" To:");Serial.println(dspGyro->targbearing); 
+        delay(4000)    ;
+        readGyro(); 
+        Serial.print("from:");Serial.print(dspGyro->curbearing); Serial.print(" To:");Serial.println(dspGyro->targbearing); 
+        
         do {
           readGyro();           
           int d= dspGyro->getDistance();
-          Serial.print("pos:");Serial.print(dspGyro->curbearing);Serial.print(" To:");Serial.print(dspGyro->targbearing); Serial.print(" Dist:");Serial.println(d);
+          //Serial.print("pos:");Serial.print(dspGyro->curbearing);Serial.print(" To:");Serial.print(dspGyro->targbearing); Serial.print(" Dist:");Serial.println(d);
+          Serial.print("pos:");Serial.print(dspGyro->curbearing); Serial.print(" Dist:");Serial.println(d);
           
-          
-          if (d>0) { //go right
+          if (d<0) { //go right
             right(); //start moving          
             //Serial.println("turn right");
           }
@@ -72,8 +76,10 @@
             //Serial.println("turn left");  
           }
          //delay(1000);
-        } while (!dspGyro->isTargetReached(4));
-        stop(); //stop moving
+        } while (!dspGyro->isTargetReached(1));
+        stop(); //stop moving        
+        Serial.print("Target Reached from:");Serial.print(lastAngle); Serial.print(" Now:");Serial.println(dspGyro->curbearing);
+        readGyro();
         Serial.print("Target Reached from:");Serial.print(lastAngle); Serial.print(" Now:");Serial.println(dspGyro->curbearing);
         dspGyro->targetReached();        
         speed= oldspeed;
