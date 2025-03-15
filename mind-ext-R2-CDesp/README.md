@@ -34,26 +34,28 @@ Servo Adaptor - Pen goes Up-Down  https://www.thingiverse.com/thing:6977092
 
 ### i2c Expander
 
+This small board is usefull if you want to have 2 i2c devices.
+
 ![](./brd2.png)
 ![](./brd2_bck.png)
 
-This small board is usefull if you want to have 2 i2c devices.
-
 ### i2c MPU6050 Accelerometer & Gyroscope
+
+This small board allows a GY521(MPU6050) to interface with the R2 via i2c
 
 ![](./Brd1.png)
 ![](./Brd1_bck.png)
 
-This small board allows a GY521(MPU6050) to interface with the R2 via i2c
 
-## Images
+
+## i2c LCD Cable
 
 ![](./LCD_cable.png)
 
 Cable for the i2c LCD 16x2
 You will need a cable like that
 
-![](./LCD_cable.png)
+![](./i2c_Cable.png)
 
 Yellow is 1 and Red is 6
 
@@ -61,8 +63,6 @@ The flat cable has 6 small cables that should be arranged like that:
 From Left to right we will be using the following four small cables
 6,4,2,3
 GND,VCC,SDA,SCL for the i2c LCD parallel to serial adaptor
-
-
 
 
 ## VIDEO
