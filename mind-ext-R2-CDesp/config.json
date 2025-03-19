@@ -1,6 +1,6 @@
 {
 	"name": {
-		"en": "R2 Extended (v.0.2)"
+		"en": "R2 Extended (v.0.3)"
 	},
 	"description": {
 		"en": "CDesp Extension Commands for Polytech R2"
@@ -11,11 +11,11 @@
 	"isBoard": false,
 	"id": "cdesplib",
 	"platform": ["win", "mac", "web"],
-	"version": "0.2",
+	"version": "0.3",
 	"asset": {
 		"arduinoC": {
 			"dir": "arduinoC/",
-			"version": "0.2",
+			"version": "0.3",
 			"board": ["arduino"],
 			"main": "main.ts"
 		}

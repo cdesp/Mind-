@@ -5,6 +5,18 @@ enum LCD_TYPES {
     1
 }
 
+enum DIGITAL_PORTS {
+    //% block="D8"
+    8,
+    //% block="D9"
+    9, 
+    //% block="D11"
+    11,
+    //% block="D12"
+    12
+}
+
+
 
 //% color="#0CA63A" iconWidth=50 iconHeight=40
 namespace cdesplib {
@@ -42,6 +54,21 @@ namespace cdesplib {
             Generator.addCode(`robo_car.setSpeed(${spd});`);
         }
     }
+
+    //% block="Θέσε ισχύ κινητήρων: Αριστερός [LSPD], Δεξιός [RSPD] "
+    //% LSPD.shadow="number" LSPD.defl="1"
+    //% RSPD.shadow="number" RSPD.defl="1"
+    export function setMotorRatio(parameter: any, block: any) {
+        let lspd = parameter.LSPD.code;
+        let rspd = parameter.RSPD.code;
+        if(Generator.board === 'arduino'){
+            Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
+            Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);           
+            Generator.addSetup(`DSRC_1`, `robo_car.init();`);
+            Generator.addCode(`robo_car.setMotorRatio(${lspd},${rspd});`);
+        }
+    }
+
 
     //% block="Κινήσου προς τα μπροστά"
     export function goForward(parameter: any, block: any) {
@@ -94,6 +121,38 @@ namespace cdesplib {
            Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);           
            Generator.addSetup(`DSRC_1`, `robo_car.init();`);
            Generator.addCode(`robo_car.stop();`);
+        }
+    }    
+
+    //% block="Στυλό στην θέση [PIN]"
+    //% PIN.shadow="dropdown" PIN.options="DIGITAL_PORTS" PIN.defl="DIGITAL_PORTS.12"    
+    export function setPenPin(parameter: any, block: any) {
+        let pin = parameter.PIN.code;
+        if(Generator.board === 'arduino'){
+           Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
+           Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);           
+           Generator.addSetup(`DSRC_1`, `robo_car.init();`);
+           Generator.addSetup(`DSRC_2`, `robo_car.setPenPin(${pin});`);
+        }
+    }    
+
+    //% block="Στυλό Πάνω"
+    export function penUp(parameter: any, block: any) {
+        if(Generator.board === 'arduino'){
+           Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
+           Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);           
+           Generator.addSetup(`DSRC_1`, `robo_car.init();`);           
+           Generator.addCode(`robo_car.penUP();`);
+        }
+    }    
+
+    //% block="Στυλό Κάτω"
+    export function penDown(parameter: any, block: any) {
+        if(Generator.board === 'arduino'){
+           Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
+           Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);           
+           Generator.addSetup(`DSRC_1`, `robo_car.init();`);
+           Generator.addCode(`robo_car.penDown();`);
         }
     }    
 
