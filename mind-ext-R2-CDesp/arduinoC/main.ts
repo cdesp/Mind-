@@ -124,15 +124,19 @@ namespace cdesplib {
         }
     }    
 
-    //% block="Στυλό στην θέση [PIN]"
+    //% block="Στυλό στην θέση [PIN] με Πάνω όριο [AUP] και Κάτω όριο [ADN] "
     //% PIN.shadow="dropdown" PIN.options="DIGITAL_PORTS" PIN.defl="DIGITAL_PORTS.12"    
+    //% AUP.shadow="number" AUP.defl="160"
+    //% ADN.shadow="number" ADN.defl="90"
     export function setPenPin(parameter: any, block: any) {
         let pin = parameter.PIN.code;
+        let aup = parameter.AUP.code;
+        let adn = parameter.ADN.code;
         if(Generator.board === 'arduino'){
            Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
            Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);           
            Generator.addSetup(`DSRC_1`, `robo_car.init();`);
-           Generator.addSetup(`DSRC_2`, `robo_car.setPenPin(${pin});`);
+           Generator.addSetup(`DSRC_3`, `robo_car.setPenPin(${pin},${adn},${aup});`);
         }
     }    
 

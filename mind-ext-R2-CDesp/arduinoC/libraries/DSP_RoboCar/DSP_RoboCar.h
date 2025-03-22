@@ -18,13 +18,15 @@
     void stop();
     void left();
     void right();
+    void doPreTurn();
+    void doPostTurn();
     void turn();
     void turnCompensate();
     void turnLeft(int deg);
     void turnRight(int deg);
-    void readGyro();
+    float readGyro();
     int getDegrees();
-    void setPenPin(int pin);
+    void setPenPin(int pin, int newDnAngle, int newUpAngle);
     void penUP();
     void penDown();
     void initLCD(int type);
@@ -46,6 +48,9 @@
      float rightMotorRatio;
      int leftSpeed;
      int rightSpeed;
+     int oldspeed;
+     float tmComp,tmBack;
+     int servoUp,servoDown;
      DESP_Gyro *dspGyro;
      TB6612FNG *spdobj;
      LCD_I2C *lcd;
