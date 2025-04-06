@@ -48,6 +48,11 @@ This small board allows a GY521(MPU6050) to interface with the R2 via i2c
 ![](./Brd1_bck.png)
 
 
+### My small production PCBs manufactured by JLCPCB (you can download the zip files on the schematics folders)
+
+![](./cdesp_PCBs.png)
+![](./cdesp_PCBs_Unpop.png)
+
 
 ## i2c LCD Cable
 
