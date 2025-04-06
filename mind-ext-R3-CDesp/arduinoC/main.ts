@@ -1,8 +1,69 @@
+enum SPD_TYPES {
+    //% block="Μέγιστη"
+    0,
+    //% block="Πολύ Μεγάλη"
+    1,
+    //% block="Μεγάλη"
+    2,
+    //% block="Μέτρια"
+    3,
+    //% block="Μικρή"
+    4,
+    //% block="Πολύ μικρή"
+    5,
+    //% block="Ελάχιστη"
+    6
+
+}
+
+
+enum ECH_TYPES {
+    //% block="D6"
+    6,
+    //% block="D7"
+    7, 
+    //% block="D8"
+    8,
+    //% block="D9"
+    9, 
+    //% block="A0"
+    A0,
+    //% block="A1"
+    A1, 
+    //% block="A2"
+    A2,
+    //% block="A3"
+    A3, 
+    //% block="A4"
+    A4,
+    //% block="A5"
+    A5
+}
+
+
+enum TRG_TYPES {
+    //% block="D6"
+    6,
+    //% block="D9"
+    9, 
+}
 
 
 //% color="#000099" iconWidth=50 iconHeight=40
 namespace cdesplib2 {
 
+
+    //% block="Θέσε Ταχύτητα [SPD] "
+    //% SPD.shadow="dropdown" SPD.options="SPD_TYPES" TYP.defl="3"
+    export function setSpeed(parameter: any, block: any) {
+        let spd = parameter.SPD.code;
+        if(Generator.board === 'arduino'){
+            Generator.addInclude("DSCR", "#include <DSP_Crane.h>");
+            Generator.addObject(`DSCR`, `DESP_Crane`, `crane`);           
+            Generator.addSetup(`DSCR_1`, `crane.init();`);
+            Generator.addCode(`crane.setSpeed(${spd});`);
+        }
+    }
 
     //% block="Θέσε Βραχίονα (Μπρος - Πίσω) στην θέση [DEG] "
     //% DEG.shadow="number" DEG.defl="100" DEG.min="50" DEG.max="150"
@@ -148,5 +209,29 @@ namespace cdesplib2 {
             Generator.addCode(`crane.closeClaw(${deg});`);
         }
     }
+
+    //% block="Σύνδεση αισθητήρα απόστασης σε echo [ECH] και trigger [TRG] "
+    //% ECH.shadow="dropdown" ECH.options="ECH_TYPES" ECH.defl="7"
+    //% TRG.shadow="dropdown" TRG.options="TRG_TYPES" TRG.defl="6"
+    export function setUsonic(parameter: any, block: any) {
+        let ech = parameter.ECH.code;
+        let trg = parameter.TRG.code;
+        if(Generator.board === 'arduino'){
+            Generator.addInclude("DSCR", "#include <DSP_Crane.h>");
+            Generator.addObject(`DSCR`, `DESP_Crane`, `crane`);           
+            Generator.addSetup(`DSCR_1`, `crane.init();`);
+            Generator.addCode(`crane.setUsonic(${ech},${trg});`);
+        }
+    }
     
+  //% block="απόσταση από εμπόδιο" blockType="reporter"
+  export function getDistance(parameter: any, block: any) {
+    if(Generator.board === 'arduino'){ 
+        Generator.addInclude("DSCR", "#include <DSP_Crane.h>");
+        Generator.addObject(`DSCR`, `DESP_Crane`, `crane`);           
+        Generator.addSetup(`DSCR_1`, `crane.init();`);
+        Generator.addCode(`crane.readUsonic()`);
+    }
+ }    
+
 }
