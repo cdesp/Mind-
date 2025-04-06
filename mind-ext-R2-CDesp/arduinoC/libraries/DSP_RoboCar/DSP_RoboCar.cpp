@@ -74,6 +74,18 @@
         return readGyro();         
       }
 
+      void DESP_Robot::forwardSec(float secs){
+         forward();
+         delay(secs*1000);
+         stop();
+      }
+
+      void DESP_Robot::backwardSec(float secs){
+        backward();
+        delay(secs*1000);
+        stop();       
+      }
+
       void DESP_Robot::turn(){
         
       //  Serial.print("from:");Serial.print(dspGyro->curbearing); Serial.print(" To:");Serial.println(dspGyro->targbearing); 
@@ -176,15 +188,42 @@
         }
       }
        
+         
+
       void DESP_Robot::turnRight(int deg){  
-        lastDeg = deg;     
-        float preAng = readGyro();
-        doPreTurn();
+        lastDeg = deg;    
+        float preAng = readGyro();   
+        Serial.println("");
+        Serial.print("Turn:");Serial.println(deg);      
+        Serial.print("Current pos:");Serial.println(preAng);      
+        Serial.println("Go Back");
+        doPreTurn();   
+        delay(250);    
         lastAngle=readGyro();
+        Serial.print("Current pos:");Serial.println(lastAngle);      
         float t=lastAngle-preAng;
-        dspGyro->goRight(deg-t);   
+        Serial.print("Difference:");Serial.println(t);      
+        Serial.print("Turning:");Serial.println(deg+t);     
+        dspGyro->goRight(deg+t);  
         turn();
+        delay(250);    
+        lastAngle=readGyro();
+        Serial.print("Current pos:");Serial.println(lastAngle);      
+        Serial.println("Go Forward");
         doPostTurn();
+        delay(250);    
+        float postAng = readGyro();
+        Serial.print("Current pos:");Serial.println(postAng);     
+        t=lastAngle-postAng;
+        Serial.print("Difference:");Serial.println(t);              
+        if (abs(t)>3){
+           Serial.println("Final turn");
+           turn();        
+           delay(250);    
+           lastAngle=readGyro();
+           Serial.print("Current pos:");Serial.println(readGyro());      
+           Serial.println("");
+        }
       }      
 
       //===============================

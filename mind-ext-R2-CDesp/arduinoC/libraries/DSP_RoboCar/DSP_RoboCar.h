@@ -16,6 +16,8 @@
     void backward();
     void forward();
     void stop();
+    void forwardSec(float secs);
+    void backwardSec(float secs);
     void left();
     void right();
     void doPreTurn();

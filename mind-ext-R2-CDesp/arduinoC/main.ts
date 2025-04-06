@@ -90,6 +90,31 @@ namespace cdesplib {
         }
     }    
 
+    //% block="Κινήσου προς τα μπροστά για [SEC] δευτερόλεπτα"
+    //% SEC.shadow="number" SEC.defl="1"
+    export function goForwardSec(parameter: any, block: any) {
+        let secs = parameter.SEC.code;
+        if(Generator.board === 'arduino'){
+            Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
+            Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);           
+            Generator.addSetup(`DSRC_1`, `robo_car.init();`);
+            Generator.addCode(`robo_car.forwardSec(${secs});`);
+        }
+    }
+
+    //% block="Κινήσου προς τα πίσω για [SEC] δευτερόλεπτα"
+    //% SEC.shadow="number" SEC.defl="1"
+    export function goBackwardSec(parameter: any, block: any) {
+        let secs = parameter.SEC.code;
+        if(Generator.board === 'arduino'){
+            Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
+            Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);           
+            Generator.addSetup(`DSRC_1`, `robo_car.init();`);
+            Generator.addCode(`robo_car.backwardSec(${secs});`);
+        }
+    }    
+
+
     //% block="Στρίψε δεξιά [DEG] μοίρες"
     //% DEG.shadow="number" DEG.defl="30"
     export function turnRight(parameter: any, block: any) {
