@@ -79,6 +79,7 @@ GND,VCC,SDA,SCL for the i2c LCD parallel to serial adaptor
 https://youtu.be/83h1kVOISvc
 
 ## Release Logs
+* V0.6  Reorganize the block commands
 * V0.5  Added new commands forward, backward for specified seconds, some fixes
 * V0.4  Added commands for motor control and Pen, some fixes on turning by degrees
 * V0.3  Changed the MPU library, added new commands for motor control
