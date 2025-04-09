@@ -5,6 +5,21 @@ enum LCD_TYPES {
     1
 }
 
+enum LCD_LIGHT {
+    //% block="Φωτεινή"
+    0,
+    //% block="Σκοτεινή"
+    1
+}
+
+enum LCD_DIR {
+    //% block="Αριστερά"
+    0,
+    //% block="Δεξιά"
+    1
+}
+
+
 enum DIGITAL_PORTS {
     //% block="D8"
     8,
@@ -16,7 +31,19 @@ enum DIGITAL_PORTS {
     12
 }
 
+enum PENPOS {
+    //% block="Πάνω"
+    0,
+    //% block="Κάτω"
+    1
+}
 
+enum CARDIR {
+    //% block="Μπροστά"
+    0,
+    //% block="Πίσω"
+    1
+}
 
 //% color="#0CA63A" iconWidth=50 iconHeight=40
 namespace cdesplib {
@@ -44,7 +71,7 @@ namespace cdesplib {
  
 
     //% block="Θέσε ταχύτητα [SPD] "
-    //% SPD.shadow="number" SPD.defl="120"
+    //% SPD.shadow="range" SPD.defl=120 SPD.params.min=60 SPD.params.max=255
     export function setSpeed(parameter: any, block: any) {
         let spd = parameter.SPD.code;
         if(Generator.board === 'arduino'){
@@ -56,8 +83,8 @@ namespace cdesplib {
     }
 
     //% block="Θέσε ισχύ κινητήρων: Αριστερός [LSPD], Δεξιός [RSPD] "
-    //% LSPD.shadow="number" LSPD.defl="1"
-    //% RSPD.shadow="number" RSPD.defl="1"
+    //% LSPD.shadow="number" LSPD.defl=1
+    //% RSPD.shadow="number" RSPD.defl=1
     export function setMotorRatio(parameter: any, block: any) {
         let lspd = parameter.LSPD.code;
         let rspd = parameter.RSPD.code;
@@ -69,73 +96,109 @@ namespace cdesplib {
         }
     }
 
-
-    //% block="Κινήσου προς τα μπροστά"
+    //% block="Κινήσου [DIR]"
+    //% DIR.shadow="dropdown" DIR.options="CARDIR"    
     export function goForward(parameter: any, block: any) {
+        let dir = parameter.DIR.code;
         if(Generator.board === 'arduino'){
             Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
             Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);           
             Generator.addSetup(`DSRC_1`, `robo_car.init();`);
-            Generator.addCode(`robo_car.forward();`);
+            if (dir == 0) {
+              Generator.addCode(`robo_car.forward();`);
+            } else {
+                Generator.addCode(`robo_car.backward();`);    
+            }
         }
     }
 
-    //% block="Κινήσου προς τα πίσω"
-    export function goBackward(parameter: any, block: any) {
-        if(Generator.board === 'arduino'){
-            Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
-            Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);           
-            Generator.addSetup(`DSRC_1`, `robo_car.init();`);
-            Generator.addCode(`robo_car.backward();`);
-        }
-    }    
-
-    //% block="Κινήσου προς τα μπροστά για [SEC] δευτερόλεπτα"
-    //% SEC.shadow="number" SEC.defl="1"
+    //% block="Κινήσου [DIR] για [SEC] δευτερόλεπτα"
+    //% DIR.shadow="dropdown" DIR.options="CARDIR"    
+    //% SEC.shadow="number" SEC.defl=1 SEC.params.min=0 SEC.params.max=15
     export function goForwardSec(parameter: any, block: any) {
         let secs = parameter.SEC.code;
+        let dir = parameter.DIR.code;
         if(Generator.board === 'arduino'){
             Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
             Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);           
             Generator.addSetup(`DSRC_1`, `robo_car.init();`);
-            Generator.addCode(`robo_car.forwardSec(${secs});`);
+            if (dir == 0) {
+               Generator.addCode(`robo_car.forwardSec(${secs});`);
+            } else {
+                Generator.addCode(`robo_car.backwardSec(${secs});`);
+            }
         }
     }
 
-    //% block="Κινήσου προς τα πίσω για [SEC] δευτερόλεπτα"
-    //% SEC.shadow="number" SEC.defl="1"
-    export function goBackwardSec(parameter: any, block: any) {
+    //% block="Στρίψε [LR] "
+    //% LR.shadow="dropdown" LR.options="LCD_DIR" 
+    export function turnLR(parameter: any, block: any) {
+        let lr = parameter.LR.code;
+        if(Generator.board === 'arduino'){
+            Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
+            Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);           
+            Generator.addSetup(`DSRC_1`, `robo_car.init();`);
+            if (lr == 0) {
+              Generator.addCode(`robo_car.left();`); 
+            } else {                   
+                Generator.addCode(`robo_car.right();`);
+            }
+        }
+    }
+
+    //% block="Στρίψε [LR] για [SEC] δευτερόλεπτα"
+    //% LR.shadow="dropdown" LR.options="LCD_DIR" 
+    //% SEC.shadow="number" SEC.defl=3 SEC.params.min=0 SEC.params.max=20
+    export function turnLRsecs(parameter: any, block: any) {
         let secs = parameter.SEC.code;
+        let lr = parameter.LR.code;
         if(Generator.board === 'arduino'){
             Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
             Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);           
             Generator.addSetup(`DSRC_1`, `robo_car.init();`);
-            Generator.addCode(`robo_car.backwardSec(${secs});`);
-        }
-    }    
-
-
-    //% block="Στρίψε δεξιά [DEG] μοίρες"
-    //% DEG.shadow="number" DEG.defl="30"
-    export function turnRight(parameter: any, block: any) {
-        let deg = parameter.DEG.code;
-        if(Generator.board === 'arduino'){
-            Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
-            Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);           
-            Generator.addSetup(`DSRC_1`, `robo_car.init();`);
-            Generator.addCode(`robo_car.turnRight(${deg});`);
+            if (lr == 0) {
+              Generator.addCode(`robo_car.leftSec(${secs});`); 
+            } else {                   
+                Generator.addCode(`robo_car.rightSec(${secs});`);
+            }
         }
     }
 
-    //% block="Στρίψε αριστερά [DEG] μοίρες"
-    //% DEG.shadow="number" DEG.defl="30"
-    export function turnLeft(parameter: any, block: any) {
+    //% block="Στρίψε [LR] [DEG] μοίρες"
+    //% LR.shadow="dropdown" LR.options="LCD_DIR" 
+    //% DEG.shadow="range" DEG.defl=30 DEG.params.min=1 DEG.params.max=180
+    export function turnLRdeg(parameter: any, block: any) {
         let deg = parameter.DEG.code;
+        let lr = parameter.LR.code;
         if(Generator.board === 'arduino'){
             Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
-            Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);            
-            Generator.addSetup(`DSRC_1`, `robo_car.init();`);            
-            Generator.addCode(`robo_car.turnLeft(${deg});`);
+            Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);           
+            Generator.addSetup(`DSRC_1`, `robo_car.init();`);
+            Generator.addSetup(`DSRC_3`, `robo_car.initGyro();`);
+            if (lr == 0) {
+              Generator.addCode(`robo_car.turnLeft(${deg});`); 
+            } else {                   
+                Generator.addCode(`robo_car.turnRight(${deg});`);
+            }
+        }
+    }
+
+    //% block="Στρίψε [LR] [DEG] μοίρες για ζωγραφική"
+    //% LR.shadow="dropdown" LR.options="LCD_DIR" 
+    //% DEG.shadow="range" DEG.defl=30 DEG.params.min=1 DEG.params.max=180
+    export function turnLRforpaint(parameter: any, block: any) {
+        let deg = parameter.DEG.code;
+        let lr = parameter.LR.code;
+        if(Generator.board === 'arduino'){
+            Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
+            Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);           
+            Generator.addSetup(`DSRC_1`, `robo_car.init();`);
+            Generator.addSetup(`DSRC_3`, `robo_car.initGyro();`);
+            if (lr == 0) {
+              Generator.addCode(`robo_car.turnLeftForPaint(${deg});`); 
+            } else {                   
+                Generator.addCode(`robo_car.turnRightForPaint(${deg});`);
+            }
         }
     }
 
@@ -161,30 +224,26 @@ namespace cdesplib {
            Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
            Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);           
            Generator.addSetup(`DSRC_1`, `robo_car.init();`);
-           Generator.addSetup(`DSRC_3`, `robo_car.setPenPin(${pin},${adn},${aup});`);
+           Generator.addSetup(`DSRC_4`, `robo_car.setPenPin(${pin},${adn},${aup});`);
         }
     }    
 
-    //% block="Στυλό Πάνω"
-    export function penUp(parameter: any, block: any) {
+    //% block="Στυλό [PPOS]"
+    //% PPOS.shadow="dropdown" PPOS.options="PENPOS"
+    export function setPenPos(parameter: any, block: any) {
+        let p = parameter.PPOS.code;
         if(Generator.board === 'arduino'){
-           Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
-           Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);           
-           Generator.addSetup(`DSRC_1`, `robo_car.init();`);           
-           Generator.addCode(`robo_car.penUP();`);
-        }
-    }    
-
-    //% block="Στυλό Κάτω"
-    export function penDown(parameter: any, block: any) {
-        if(Generator.board === 'arduino'){
-           Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
-           Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);           
-           Generator.addSetup(`DSRC_1`, `robo_car.init();`);
-           Generator.addCode(`robo_car.penDown();`);
-        }
-    }    
-
+            Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
+            Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);           
+            Generator.addSetup(`DSRC_1`, `robo_car.init();`);           
+            if (p == 0) {
+              Generator.addCode(`robo_car.penUP();`);
+            } else {
+                Generator.addCode(`robo_car.penDown();`);
+            }
+         }
+     }    
+     
     //% block="Ενεργοποίησε LCD [TYP]"
     //% TYP.shadow="dropdown" TYP.options="LCD_TYPES" TYP.defl="0"
     export function initLCD(parameter: any, block: any) {
@@ -205,23 +264,21 @@ namespace cdesplib {
         }
     }
 
-    //% block="Φωτεινή LCD"
-    export function backlightLCDon(parameter: any, block: any) {
+
+    //% block="Κάνε [LIT] την LCD"
+    //% LIT.shadow="dropdown" LIT.options="LCD_LIGHT"    
+    export function blightLCDset(parameter: any, block: any) {
+        let ligt_typ = parameter.LIT.code;
         if(Generator.board === 'arduino'){
             Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
-            Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);     
-            Generator.addCode(`robo_car.backlightOnLCD();`);      
+            Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);  
+            if (ligt_typ == 0) {  
+              Generator.addCode(`robo_car.backlightOnLCD();`);      
+            } else {
+                Generator.addCode(`robo_car.backlightOffLCD();`);         
+            }
         }
     }
-
-    //% block="Σκοτεινή LCD"
-    export function backlightLCDoff(parameter: any, block: any) {
-        if(Generator.board === 'arduino'){
-            Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
-            Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);     
-            Generator.addCode(`robo_car.backlightOffLCD();`);      
-        }
-    }    
 
     //% block="Εμφάνισε στην οθόνη LCD: [MSG]" blockType="command"
     //% MSG.shadow="string"
@@ -235,8 +292,8 @@ namespace cdesplib {
     }    
     
     //% block="Θέσε τον δείκτη κειμένου της οθόνης LCD στην θέση [X],[Y]"
-    //% X.shadow="number" X.defl="0" X.params.max="40"
-    //% Y.shadow="number" Y.defl="0" Y.params.max="4" 
+    //% X.shadow="range" X.defl="0" X.params.max="40"
+    //% Y.shadow="range" Y.defl="0" Y.params.max="4" 
     export function setCursorLCD(parameter: any, block: any) {
         let x = parameter.X.code;
         let y = parameter.Y.code;
@@ -247,21 +304,18 @@ namespace cdesplib {
         }
     }
 
-    //% block="Ολίσθηση LCD αριστερά"
+    //% block="Ολίσθηση LCD [LCDDIR]"
+    //% LCDDIR.shadow="dropdown" LCDDIR.options="LCD_DIR" LCDDIR.defl="0"    
     export function scrollLeftLCD(parameter: any, block: any) {
+        let lcddir = parameter.LCDDIR.code;
         if(Generator.board === 'arduino'){
             Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
-            Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);     
-            Generator.addCode(`robo_car.scrollLeftLCD();`);      
-        }
-    }    
-
-    //% block="Ολίσθηση LCD δεξιά"
-    export function scrollRightLCD(parameter: any, block: any) {
-        if(Generator.board === 'arduino'){
-            Generator.addInclude("DSRC", "#include <DSP_RoboCar.h>");
-            Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`);     
-            Generator.addCode(`robo_car.scrollRightLCD();`);      
+            Generator.addObject(`DSRC`, `DESP_Robot`, `robo_car`); 
+            if (lcddir == 0) {
+               Generator.addCode(`robo_car.scrollLeftLCD();`);      
+            } else {
+                Generator.addCode(`robo_car.scrollRightLCD();`);
+            }
         }
     }    
 

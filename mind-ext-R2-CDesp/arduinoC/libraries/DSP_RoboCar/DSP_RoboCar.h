@@ -20,12 +20,17 @@
     void backwardSec(float secs);
     void left();
     void right();
+    void leftSec(float secs);
+    void rightSec(float secs);
     void doPreTurn();
     void doPostTurn();
     void turn();
     void turnCompensate();
     void turnLeft(int deg);
     void turnRight(int deg);
+    void turnLeftForPaint(int deg);
+    void turnRightForPaint(int deg);
+    void initGyro();
     float readGyro();
     int getDegrees();
     void setPenPin(int pin, int newDnAngle, int newUpAngle);

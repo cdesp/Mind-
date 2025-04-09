@@ -9,9 +9,9 @@
         servo_A1 = new Servo();  //Left Right
         usnc =  new DFRobot_URM10();
         
-        pos_8 = 100;
+        pos_8 = 90;
         pos_9 = 100;
-        pos_A0 = 50;
+        pos_A0 = 60;
         pos_A1 = 90;
         mvspd = 3;
         echo = 7;
@@ -52,6 +52,7 @@
         setServoPosition(servo_8,pos_8,deg);
         pos_8=deg;
         servo_8->angle(abs(pos_8));
+        delay(MVDEL);
       }      
 
       void DESP_Crane::moveFront(int deg){           
@@ -70,6 +71,7 @@
         setServoPosition(servo_A0,pos_A0,deg);   
         pos_A0=deg;
         servo_A0->angle(abs(pos_A0));
+        delay(MVDEL);
       }
 
       void DESP_Crane::moveUp(int deg){
@@ -88,6 +90,7 @@
         setServoPosition(servo_A1,pos_A1,deg);
         pos_A1=deg;
         servo_A1->angle(abs(pos_A1));
+        delay(MVDEL);
       }
 
       void DESP_Crane::moveLeft(int deg){
@@ -106,6 +109,7 @@
         setServoPosition(servo_9,pos_9,deg);
         pos_9=deg;
         servo_9->angle(abs(pos_9));
+        delay(MVDEL);
       }
 
       void DESP_Crane::openClaw(int deg){

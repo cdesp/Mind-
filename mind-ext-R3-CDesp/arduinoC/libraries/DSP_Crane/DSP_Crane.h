@@ -14,6 +14,7 @@
   #define PA1_MIN 20
 
   const uint8_t delays[] = {0,20,40,60,80,100};
+  const int MVDEL=500;
  
   class DESP_Crane
   {

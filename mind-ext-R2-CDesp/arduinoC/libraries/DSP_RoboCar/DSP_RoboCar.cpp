@@ -3,8 +3,8 @@
 
       DESP_Robot::DESP_Robot(){        
         speed = 100;   
-        spdobj = new TB6612FNG(5,4,6,7);
-        dspGyro = new DESP_Gyro();     
+        spdobj = new TB6612FNG(5,4,6,7);        
+        dspGyro = new DESP_Gyro();
         servo_n = new Servo();
         leftMotorRatio = 1;
         rightMotorRatio = 1;
@@ -13,8 +13,7 @@
       }
 
       void DESP_Robot::init(){
-        Serial.begin(115200);
-        dspGyro->init();    
+        Serial.begin(115200);           
         setSpeed(120); //default speed
       }
 
@@ -51,7 +50,8 @@
        
       void DESP_Robot::stop(){
         spdobj->setSpeed(M1, CW, 0);
-        spdobj->setSpeed(M2, CCW, 0);        
+        spdobj->setSpeed(M2, CCW, 0); 
+        delay(250);
       }
        
       void DESP_Robot::left(){
@@ -85,6 +85,19 @@
         delay(secs*1000);
         stop();       
       }
+
+      void DESP_Robot::leftSec(float secs){
+        left();
+        delay(secs*1000);
+        stop();       
+      }
+      
+      void DESP_Robot::rightSec(float secs){
+        right();
+        delay(secs*1000);
+        stop();       
+      }
+  
 
       void DESP_Robot::turn(){
         
@@ -152,7 +165,21 @@
         setSpeed(oldspeed);
       }
 
-      void DESP_Robot::turnLeft(int deg){     
+      void DESP_Robot::turnLeft(int deg){  
+        lastAngle=readGyro();
+        dspGyro->goLeft(deg); 
+        turn();
+        delay(250);  
+      }
+
+      void DESP_Robot::turnRight(int deg){  
+        lastAngle=readGyro();
+        dspGyro->goRight(deg); 
+        turn();
+        delay(250);  
+      }
+
+      void DESP_Robot::turnLeftForPaint(int deg){     
         lastDeg = deg;    
         float preAng = readGyro();   
         Serial.println("");
@@ -187,10 +214,8 @@
            Serial.println("");
         }
       }
-       
-         
-
-      void DESP_Robot::turnRight(int deg){  
+                
+      void DESP_Robot::turnRightForPaint(int deg){  
         lastDeg = deg;    
         float preAng = readGyro();   
         Serial.println("");
@@ -225,6 +250,10 @@
            Serial.println("");
         }
       }      
+
+      void DESP_Robot::initGyro(){        
+        dspGyro->init(); 
+      }
 
       //===============================
 

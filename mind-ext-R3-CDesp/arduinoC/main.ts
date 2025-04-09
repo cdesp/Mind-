@@ -16,7 +16,6 @@ enum SPD_TYPES {
 
 }
 
-
 enum ECH_TYPES {
     //% block="D6"
     6,
@@ -40,21 +39,51 @@ enum ECH_TYPES {
     A5
 }
 
-
 enum TRG_TYPES {
     //% block="D6"
     6,
     //% block="D9"
-    9, 
+    9
 }
 
+enum CRPOS_TYPES {
+    //% block="μπροστά"
+    0,
+    //% block="πίσω"
+    1, 
+    //% block="δεξιά"
+    2,
+    //% block="αριστερά"
+    3, 
+    //% block="πάνω"
+    4,
+    //% block="κάτω"
+    5 
+}
+
+enum POSDA_TYPES {
+    //% block="Άνοιξε"
+    0,
+    //% block="Κλείσε"
+    1
+}
+
+enum CRPOS0_TYPES {
+    //% block="Μπρος - Πίσω"
+    0,
+    //% block="Δεξιά - Αριστερά"
+    1,
+    //% block="Πάνω - Κάτω"    
+    2
+
+}
 
 //% color="#000099" iconWidth=50 iconHeight=40
 namespace cdesplib2 {
 
 
     //% block="Θέσε Ταχύτητα [SPD] "
-    //% SPD.shadow="dropdown" SPD.options="SPD_TYPES" TYP.defl="3"
+    //% SPD.shadow="dropdown" SPD.options="SPD_TYPES" SPD.defl="SPD_TYPES.3"
     export function setSpeed(parameter: any, block: any) {
         let spd = parameter.SPD.code;
         if(Generator.board === 'arduino'){
@@ -65,117 +94,47 @@ namespace cdesplib2 {
         }
     }
 
-    //% block="Θέσε Βραχίονα (Μπρος - Πίσω) στην θέση [DEG] "
-    //% DEG.shadow="number" DEG.defl="100" DEG.min="50" DEG.max="150"
+    //% block="Θέσε Βραχίονα [CRPOS0] στην θέση [DEG] "
+    //% CRPOS0.shadow="dropdown" CRPOS0.options="CRPOS0_TYPES" 
+    //% DEG.shadow="range" DEG.defl=100 DEG.params.min=50 DEG.params.max=150
     export function setFB(parameter: any, block: any) {
+        let pcr = Number(parameter.CRPOS0.code);
         let deg = parameter.DEG.code;
         if(Generator.board === 'arduino'){
             Generator.addInclude("DSCR", "#include <DSP_Crane.h>");
             Generator.addObject(`DSCR`, `DESP_Crane`, `crane`);           
             Generator.addSetup(`DSCR_1`, `crane.init();`);
-            Generator.addCode(`crane.setFB(${deg});`);
+            switch (pcr){
+                case 0: Generator.addCode(`crane.setFB(${deg});`);break;
+                case 1: Generator.addCode(`crane.setLR(${deg});`);break;
+                case 2: Generator.addCode(`crane.setUD(${deg});`);break;   
+            }            
         }
     }
 
-    //% block="Βραχίονας μπροστά κατά [DEG] "
-    //% DEG.shadow="number" DEG.defl="5" DEG.min="1" DEG.max="40"
+    //% block="Βραχίονας [CRPOS] κατά [DEG] "
+    //% CRPOS.shadow="dropdown" CRPOS.options="CRPOS_TYPES" 
+    //% DEG.shadow="range" DEG.defl=5 DEG.params.min=1 DEG.params.max=40
     export function moveFront(parameter: any, block: any) {
+        let pcr = Number(parameter.CRPOS.code);        
         let deg = parameter.DEG.code;
         if(Generator.board === 'arduino'){
             Generator.addInclude("DSCR", "#include <DSP_Crane.h>");
             Generator.addObject(`DSCR`, `DESP_Crane`, `crane`);           
-            Generator.addSetup(`DSCR_1`, `crane.init();`);
-            Generator.addCode(`crane.moveFront(${deg});`);
+            Generator.addSetup(`DSCR_1`, `crane.init();`);            
+            switch (pcr) {
+               case 0: Generator.addCode(`crane.moveFront(${deg});`);break;
+               case 1: Generator.addCode(`crane.moveBack(${deg});`);break;
+               case 2: Generator.addCode(`crane.moveRight(${deg});`);break;
+               case 3: Generator.addCode(`crane.moveLeft(${deg});`);break;
+               case 4: Generator.addCode(`crane.moveUp(${deg});`);break;
+               case 5: Generator.addCode(`crane.moveDown(${deg});`);break;
+            }
         }
     }
 
-    //% block="Βραχίονας πίσω κατά [DEG] "
-    //% DEG.shadow="number" DEG.defl="5" DEG.min="1" DEG.max="40"
-    export function moveBack(parameter: any, block: any) {
-        let deg = parameter.DEG.code;
-        if(Generator.board === 'arduino'){
-            Generator.addInclude("DSCR", "#include <DSP_Crane.h>");
-            Generator.addObject(`DSCR`, `DESP_Crane`, `crane`);           
-            Generator.addSetup(`DSCR_1`, `crane.init();`);
-            Generator.addCode(`crane.moveBack(${deg});`);
-        }
-    }
-
-
-   //% block="Θέσε Βραχίονα (Πάνω - Κάτω) στην θέση [DEG] "
-    //% DEG.shadow="number" DEG.defl="50" DEG.min="0" DEG.max="100"
-    export function setUD(parameter: any, block: any) {
-        let deg = parameter.DEG.code;
-        if(Generator.board === 'arduino'){
-            Generator.addInclude("DSCR", "#include <DSP_Crane.h>");
-            Generator.addObject(`DSCR`, `DESP_Crane`, `crane`);           
-            Generator.addSetup(`DSCR_1`, `crane.init();`);
-            Generator.addCode(`crane.setUD(${deg});`);
-        }
-    }
-
-    //% block="Βραχίονας πάνω κατά [DEG] "
-    //% DEG.shadow="number" DEG.defl="5" DEG.min="1" DEG.max="40"
-    export function moveUp(parameter: any, block: any) {
-        let deg = parameter.DEG.code;
-        if(Generator.board === 'arduino'){
-            Generator.addInclude("DSCR", "#include <DSP_Crane.h>");
-            Generator.addObject(`DSCR`, `DESP_Crane`, `crane`);           
-            Generator.addSetup(`DSCR_1`, `crane.init();`);
-            Generator.addCode(`crane.moveUp(${deg});`);
-        }
-    }
-
-    //% block="Βραχίονας κάτω κατά [DEG] "
-    //% DEG.shadow="number" DEG.defl="5" DEG.min="1" DEG.max="40"
-    export function moveDown(parameter: any, block: any) {
-        let deg = parameter.DEG.code;
-        if(Generator.board === 'arduino'){
-            Generator.addInclude("DSCR", "#include <DSP_Crane.h>");
-            Generator.addObject(`DSCR`, `DESP_Crane`, `crane`);           
-            Generator.addSetup(`DSCR_1`, `crane.init();`);
-            Generator.addCode(`crane.moveDown(${deg});`);
-        }
-    }
-
-   //% block="Θέσε Βραχίονα (Δεξιά - Αριστερά) στην θέση [DEG] "
-    //% DEG.shadow="number" DEG.defl="90" DEG.min="20" DEG.max="160"
-    export function setLR(parameter: any, block: any) {
-        let deg = parameter.DEG.code;
-        if(Generator.board === 'arduino'){
-            Generator.addInclude("DSCR", "#include <DSP_Crane.h>");
-            Generator.addObject(`DSCR`, `DESP_Crane`, `crane`);           
-            Generator.addSetup(`DSCR_1`, `crane.init();`);
-            Generator.addCode(`crane.setLR(${deg});`);
-        }
-    }
-
-    //% block="Βραχίονας δεξιά κατά [DEG] "
-    //% DEG.shadow="number" DEG.defl="5" DEG.min="1" DEG.max="40"
-    export function moveRight(parameter: any, block: any) {
-        let deg = parameter.DEG.code;
-        if(Generator.board === 'arduino'){
-            Generator.addInclude("DSCR", "#include <DSP_Crane.h>");
-            Generator.addObject(`DSCR`, `DESP_Crane`, `crane`);           
-            Generator.addSetup(`DSCR_1`, `crane.init();`);
-            Generator.addCode(`crane.moveRight(${deg});`);
-        }
-    }
-
-    //% block="Βραχίονας αριστερά κατά [DEG] "
-    //% DEG.shadow="number" DEG.defl="5" DEG.min="1" DEG.max="40"
-    export function moveLeft(parameter: any, block: any) {
-        let deg = parameter.DEG.code;
-        if(Generator.board === 'arduino'){
-            Generator.addInclude("DSCR", "#include <DSP_Crane.h>");
-            Generator.addObject(`DSCR`, `DESP_Crane`, `crane`);           
-            Generator.addSetup(`DSCR_1`, `crane.init();`);
-            Generator.addCode(`crane.moveLeft(${deg});`);
-        }
-    }
-
-   //% block="Θέσε δαγκάνα στην θέση [DEG] "
-    //% DEG.shadow="number" DEG.defl="100" DEG.min="50" DEG.max="150"
+    //% block="Θέσε δαγκάνα στην θέση [DEG] "
+    //% DEG.shadow="range" DEG.defl=100 DEG.params.min=50 DEG.params.max=150
     export function setClaw(parameter: any, block: any) {
         let deg = parameter.DEG.code;
         if(Generator.board === 'arduino'){
@@ -186,33 +145,27 @@ namespace cdesplib2 {
         }
     }
 
-    //% block="Άνοιξε δαγκάνα κατά [DEG] "
-    //% DEG.shadow="number" DEG.defl="5" DEG.min="1" DEG.max="40"
+    //% block="[POSDA] δαγκάνα κατά [DEG] "
+    //% POSDA.shadow="dropdown" POSDA.options="POSDA_TYPES" 
+    //% DEG.shadow="range" DEG.defl=5 DEG.params.min=1 DEG.params.max=40
     export function openClaw(parameter: any, block: any) {
         let deg = parameter.DEG.code;
+        let pd = parameter.POSDA.code;
         if(Generator.board === 'arduino'){
             Generator.addInclude("DSCR", "#include <DSP_Crane.h>");
             Generator.addObject(`DSCR`, `DESP_Crane`, `crane`);           
             Generator.addSetup(`DSCR_1`, `crane.init();`);
-            Generator.addCode(`crane.openClaw(${deg});`);
-        }
-    }
-
-    //% block="Κλείσε δαγκάνα κατά [DEG] "
-    //% DEG.shadow="number" DEG.defl="5" DEG.min="1" DEG.max="40"
-    export function closeClaw(parameter: any, block: any) {
-        let deg = parameter.DEG.code;
-        if(Generator.board === 'arduino'){
-            Generator.addInclude("DSCR", "#include <DSP_Crane.h>");
-            Generator.addObject(`DSCR`, `DESP_Crane`, `crane`);           
-            Generator.addSetup(`DSCR_1`, `crane.init();`);
-            Generator.addCode(`crane.closeClaw(${deg});`);
+            if (pd == 0) {
+              Generator.addCode(`crane.openClaw(${deg});`);
+            } else {
+                Generator.addCode(`crane.closeClaw(${deg});`);    
+            }
         }
     }
 
     //% block="Σύνδεση αισθητήρα απόστασης σε echo [ECH] και trigger [TRG] "
-    //% ECH.shadow="dropdown" ECH.options="ECH_TYPES" ECH.defl="7"
-    //% TRG.shadow="dropdown" TRG.options="TRG_TYPES" TRG.defl="6"
+    //% ECH.shadow="dropdown" ECH.options="ECH_TYPES" ECH.defl="ECH_TYPES.7"
+    //% TRG.shadow="dropdown" TRG.options="TRG_TYPES" TRG.defl="ECH_TYPES.6"
     export function setUsonic(parameter: any, block: any) {
         let ech = parameter.ECH.code;
         let trg = parameter.TRG.code;
