@@ -53,6 +53,7 @@ This small board allows a GY521(MPU6050) to interface with the R2 via i2c
 ![](./cdesp_PCBs.png)
 ![](./cdesp_PCBs_Unpop.png)
 
+You will need to print this (https://www.thingiverse.com/thing:7005290) lego block to hold the PCBs in place. (The i2c Expander and the MPU6050)
 
 ## i2c LCD Cable
 
