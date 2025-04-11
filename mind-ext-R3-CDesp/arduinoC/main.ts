@@ -78,9 +78,38 @@ enum CRPOS0_TYPES {
 
 }
 
+enum CRPOS1_TYPES {
+    //% block="Βραχίονα Μπρος - Πίσω"
+    0,
+    //% block="Βραχίονα Δεξιά - Αριστερά"
+    1,
+    //% block="Βραχίονα Πάνω - Κάτω"    
+    2,
+    //% block="Δαγκάνα"    
+    3    
+}
+
+
 //% color="#000099" iconWidth=50 iconHeight=40
 namespace cdesplib2 {
 
+
+    //% block="θέση [CRPOS1] " blockType="reporter"
+    //% CRPOS1.shadow="dropdown" CRPOS1.options="CRPOS1_TYPES"
+    export function getCranePos(parameter: any, block: any) {
+        let pcr = Number(parameter.CRPOS1.code);
+        if(Generator.board === 'arduino'){ 
+            Generator.addInclude("DSCR", "#include <DSP_Crane.h>");
+            Generator.addObject(`DSCR`, `DESP_Crane`, `crane`);           
+            Generator.addSetup(`DSCR_1`, `crane.init();`);
+            switch (pcr){
+                case 0: Generator.addCode(`crane.getFBPos();`);break;
+                case 1: Generator.addCode(`crane.getLRPos();`);break;
+                case 2: Generator.addCode(`crane.getUDPos();`);break;   
+                case 3: Generator.addCode(`crane.getCLPos();`);break;   
+            }                        
+        }
+    }    
 
     //% block="Θέσε Ταχύτητα [SPD] "
     //% SPD.shadow="dropdown" SPD.options="SPD_TYPES" SPD.defl="SPD_TYPES.3"
@@ -94,9 +123,31 @@ namespace cdesplib2 {
         }
     }
 
+    //% block="Για [CRPOS1] Θέσε ελάχιστο [DEG] και μέγιστο [DEGMAX] "
+    //% CRPOS1.shadow="dropdown" CRPOS1.options="CRPOS1_TYPES"
+    //% DEG.shadow="range" DEG.defl=50 DEG.params.min=0 DEG.params.max=180
+    //% DEGMAX.shadow="range" DEGMAX.defl=50 DEGMAX.params.min=0 DEGMAX.params.max=180
+    export function setminbr(parameter: any, block: any) {
+        let pcr = Number(parameter.CRPOS1.code);
+        let deg = parameter.DEG.code;
+        let degmax = parameter.DEGMAX.code;
+        if(Generator.board === 'arduino'){
+            Generator.addInclude("DSCR", "#include <DSP_Crane.h>");
+            Generator.addObject(`DSCR`, `DESP_Crane`, `crane`);           
+            Generator.addSetup(`DSCR_1`, `crane.init();`);
+            switch (pcr){
+                case 0: Generator.addCode(`crane.setFBminmax(${deg},${degmax});`);break;
+                case 1: Generator.addCode(`crane.setLRminmax(${deg},${degmax});`);break;
+                case 2: Generator.addCode(`crane.setUDminmax(${deg},${degmax});`);break;   
+                case 3: Generator.addCode(`crane.setCLminmax(${deg},${degmax});`);break;   
+            }            
+        }
+    }
+
+
     //% block="Θέσε Βραχίονα [CRPOS0] στην θέση [DEG] "
     //% CRPOS0.shadow="dropdown" CRPOS0.options="CRPOS0_TYPES" 
-    //% DEG.shadow="range" DEG.defl=100 DEG.params.min=50 DEG.params.max=150
+    //% DEG.shadow="range" DEG.defl=100 DEG.params.min=0 DEG.params.max=180
     export function setFB(parameter: any, block: any) {
         let pcr = Number(parameter.CRPOS0.code);
         let deg = parameter.DEG.code;
@@ -114,7 +165,7 @@ namespace cdesplib2 {
 
     //% block="Βραχίονας [CRPOS] κατά [DEG] "
     //% CRPOS.shadow="dropdown" CRPOS.options="CRPOS_TYPES" 
-    //% DEG.shadow="range" DEG.defl=5 DEG.params.min=1 DEG.params.max=40
+    //% DEG.shadow="range" DEG.defl=5 DEG.params.min=1 DEG.params.max=60
     export function moveFront(parameter: any, block: any) {
         let pcr = Number(parameter.CRPOS.code);        
         let deg = parameter.DEG.code;
@@ -134,7 +185,7 @@ namespace cdesplib2 {
     }
 
     //% block="Θέσε δαγκάνα στην θέση [DEG] "
-    //% DEG.shadow="range" DEG.defl=100 DEG.params.min=50 DEG.params.max=150
+    //% DEG.shadow="range" DEG.defl=100 DEG.params.min=0 DEG.params.max=180
     export function setClaw(parameter: any, block: any) {
         let deg = parameter.DEG.code;
         if(Generator.board === 'arduino'){
@@ -147,7 +198,7 @@ namespace cdesplib2 {
 
     //% block="[POSDA] δαγκάνα κατά [DEG] "
     //% POSDA.shadow="dropdown" POSDA.options="POSDA_TYPES" 
-    //% DEG.shadow="range" DEG.defl=5 DEG.params.min=1 DEG.params.max=40
+    //% DEG.shadow="range" DEG.defl=5 DEG.params.min=1 DEG.params.max=60
     export function openClaw(parameter: any, block: any) {
         let deg = parameter.DEG.code;
         let pd = parameter.POSDA.code;
@@ -185,6 +236,6 @@ namespace cdesplib2 {
         Generator.addSetup(`DSCR_1`, `crane.init();`);
         Generator.addCode(`crane.readUsonic()`);
     }
- }    
+   }    
 
 }
